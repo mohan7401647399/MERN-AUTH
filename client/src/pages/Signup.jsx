@@ -1,25 +1,49 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function Signup() {
   const [formData, setFormData] = useState({});
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
-  // console.log(formData);
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await fetch("/api/auth/signup", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(formData),
+  //     });
+  //     const dataJson = await response
+  //       .json()
+  //       .then((data) => console.log(data))
+  //       .catch((err) => console.log(err.message));
+  //     console.log(dataJson);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch("http://localhost:3000/api/auth/signup", formData);
-    const data = await res.json();
-    console.log(data);
+    await axios
+      .post("/api/auth/signup", { formData })
+      .then((result) => console.log(result))
+      .catch((err) => console.log(err));
   };
+  console.log(formData);
 
   return (
     <div className=" p-3 mx-auto max-w-lg">
       <h1 className="text-3xl text-center font-semibold my-7">Sign up</h1>
       <form onSubmit={handleSubmit} className=" flex flex-col gap-4">
         <input
+          name="username"
           type="text"
           placeholder="Username"
           id="username"
@@ -27,6 +51,7 @@ export default function Signup() {
           onChange={handleChange}
         />
         <input
+          name="email"
           type="email"
           placeholder="Email"
           id="email"
@@ -34,6 +59,7 @@ export default function Signup() {
           onChange={handleChange}
         />
         <input
+          name="password"
           type="password"
           placeholder="Password"
           id="Password"
